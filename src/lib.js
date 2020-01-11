@@ -135,6 +135,9 @@ const runRequest = async request => {
   console.groupEnd();
 };
 
+/**
+ * @param {{name: string, description: string, mode: ('schema'|'exact'), request: {}[], method: string, parse: boolean, headers: Record<string, string>, query: Record<string, string>, path: string, response: {}}} test
+ */
 const runTest = async function* (test) {
   console.group();
   logTest(test);
@@ -164,6 +167,9 @@ const runTest = async function* (test) {
   console.groupEnd();
 };
 
+/**
+ * @param {{method: string, name: string, description: string, parse: boolean, mode: ('exact'|'schema'), response: {}, path: string, headers: Record<string, string>, tests: {}[], query: Record<string, string>}} suite
+ */
 const runSuite = async function* (suite) {
   logSuite(suite);
   for (let tIdx = 0; tIdx < suite.tests.length; tIdx++) {
