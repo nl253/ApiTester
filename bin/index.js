@@ -1,9 +1,11 @@
 #!/usr/bin/env node
 const fs = require('fs').promises;
 
+const argv = require('yargs').command('test', 'use file').argv;
+
 const f = require('../src/lib.js');
 
-const fName = process.argv[process.argv.length - 1];
+const fName = argv._[0];
 
 (async () => {
   console.time('suite took');

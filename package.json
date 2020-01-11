@@ -48,6 +48,7 @@
     "email": "norbertlogiewa96@gmail.com"
   },
   "dependencies": {
+    "yargs": "^15.1.0",
     "ajv": "latest",
     "chai": "^4.2.0",
     "request": "^2.88.0",
