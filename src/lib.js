@@ -84,6 +84,21 @@ const logResponse = ({headers, body, statusCode, statusMessage}) => {
   console.log('');
 };
 
+const getSchemaErrMsg = validate => {
+  return validate.errors.map(e => [
+    e.message,
+    e.data,
+    e.dataPath,
+    e.keyword,
+    e.propertyName,
+    e.schemaPath,
+  ].map(info => info || '')
+    .filter(Boolean)
+    .map(info => info.toString())
+    .join(', '),
+  ).join(', ');
+};
+
 /**
  * @param {{mode: ('exact'|'schema'), description: string, method: string, parse: boolean, body: *, headers: Record<string, string>, path: string, query: Record<string, string>, response: {body: *, status: number, headers: Record<string, string>}}} request
  * @return {Promise<void>}
@@ -115,19 +130,7 @@ const runRequest = async request => {
     const validate = ajv.compile(request.response.body);
     const valid = validate(res.body);
     if (!valid) {
-      const msg = validate.errors.map(e => [
-          e.message,
-          e.data,
-          e.dataPath,
-          e.keyword,
-          e.propertyName,
-          e.schemaPath,
-        ].map(info => info || '').
-          filter(Boolean).
-          map(info => info.toString()).
-          join(', '),
-      ).join(', ');
-      throw new Error(`schema validation failed ${msg}`);
+      throw new Error(`schema validation failed ${getSchemaErrMsg(validate)}`);
     }
   } else {
     throw new Error(`mode ${request.mode || 'undefined'} not implemented yet`);
@@ -199,6 +202,9 @@ const runSuite = async function* (suite) {
   }
 };
 
+/**
+ * @param {{}} s
+ */
 const run = (s) => runSuite({
   name: '',
   method: 'get',

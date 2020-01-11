@@ -3,24 +3,21 @@ const {lstat, readFile, readdir} = require('fs').promises;
 const {join, resolve} = require('path');
 
 const program = require('commander');
-const chalk = require('chalk');
+const {red, yellow} = require('chalk');
 
 const {description, name, version} = require('../package.json');
 const runner = require('../src/lib.js');
 
 console._error = console.error;
-console.error = (...msg) => console._error(chalk.red(msg.map(m => m.toString()).join(' ')));
+console.error = (...msg) => console._error(red(msg.map(m => m.toString()).join(' ')));
 
 console._warn = console.warn;
-console.warn = (...msg) => console._warn(chalk.yellow(msg.map(m => m.toString()).join(' ')));
+console.warn = (...msg) => console._warn(yellow(msg.map(m => m.toString()).join(' ')));
 
 /**
  * @param {...string} nodes
  */
-const collectFiles = async function*(...nodes) {
-  /**
-   * @type {Array<Promise<Array<string>>>}
-   */
+const collectFiles = async function* (...nodes) {
   for (const n of nodes) {
     const stats = await lstat(n);
     if (stats.isFile()) {
@@ -39,18 +36,21 @@ const collectFiles = async function*(...nodes) {
   }
 };
 
-program.version(version).
-  description(description).
-  name(name).
-  arguments('<file> [files...]').
-  action(async (file, files) => {
+program
+  .version(version)
+  .description(description)
+  .name(name)
+  .arguments('<file> [files...]')
+  .action(async (file, files) => {
     for await (const fPath of collectFiles(file, ...files)) {
       console.time('suite took');
       try {
+        // eslint-disable-next-line no-unused-vars
         for await (const t of runner(
           fPath.endsWith('.js')
             ? require(fPath)
-            : JSON.parse(await readFile(fPath, { encoding: 'utf-8' })))) {}
+            : JSON.parse(await readFile(fPath, {encoding: 'utf-8'})))) {
+        }
         console.log('');
         console.timeEnd('suite took');
       } catch (e) {
@@ -60,5 +60,5 @@ program.version(version).
     }
   });
 
+// eslint-disable-next-line no-undef
 program.parse(process.argv);
-
