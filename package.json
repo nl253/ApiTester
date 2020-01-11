@@ -6,7 +6,7 @@
   "browserslist": [],
   "contributors": [
     {
-      "url": "https://github/nl253",
+      "url": "https://github.com/nl253",
       "email": "norbertlogiewa96@gmail.com",
       "name": "Norbert Logiewa"
     }
@@ -15,7 +15,7 @@
     {
       "name": "Norbert Logiewa",
       "email": "norbertlogiewa96@gmail.com",
-      "url": "https://github/nl253"
+      "url": "https://github.com/nl253"
     }
   ],
   "readme": "./README.md",
@@ -29,7 +29,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github/nl253/ApiTester"
+    "url": "https://github.com/nl253/ApiTester"
   },
   "directories": {
     "doc": "./docs",
@@ -37,7 +37,7 @@
     "example": "./examples"
   },
   "bugs": {
-    "url": "https://github/nl253/ApiTester/issues",
+    "url": "https://github.com/nl253/ApiTester/issues",
     "email": "norbertlogiewa96@gmail.com"
   },
   "dependencies": {
