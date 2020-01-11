@@ -1,5 +1,5 @@
 {
-  "name": "api-tester",
+  "name": "simple-api-tester",
   "version": "0.1.0",
   "description": "API Tester",
   "private": false,
@@ -21,7 +21,9 @@
   "readme": "./README.md",
   "homepage": "",
   "files": [
-    "*.js"
+    "./src/*.js",
+    "./bin/*.js",
+    "schema.json"
   ],
   "engineStrict": true,
   "engines": {
