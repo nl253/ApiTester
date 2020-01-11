@@ -15,19 +15,6 @@ console._warn = console.warn;
 console.warn = (...msg) => console._warn(yellow(msg.map(m => m.toString()).join(' ')));
 
 /**
- * @return {Promise<Array<Promise>>}
- */
-const collectAsyncIter = async (iter) => {
-  const ps = [];
-  let focus;
-  do {
-    focus = iter.next();
-    ps.push(focus);
-  } while (!focus.done);
-  return ps;
-};
-
-/**
  * @param {...string} nodes
  */
 const collectFiles = async function* (...nodes) {
