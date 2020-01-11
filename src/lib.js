@@ -17,22 +17,35 @@ const normalizeHeaders = headers =>
     .map(([header, value]) => [header.toLocaleLowerCase(), value]));
 
 /**
- * @param {{name: string, path: string}} suite
+ * @param {{name: string, path: string, description: string}} suite
  */
-const logSuite = ({ name, path }) => console.log(`Test Suite ${name ? name + ' ' : ''}${path}\n`);
+const logSuite = ({ name, path, description }) => {
+  console.log(`Test Suite :: ${name ? name + ' ' : ''}${path}\n`);
+  if (description) {
+    console.log(description);
+  }
+};
 
 /**
- * @param {{name: string}} test
+ * @param {{name: string, description: string}} test
  */
-const logTest = ({ name }) => console.log(name.toUpperCase());
+const logTest = ({ name, description }) => {
+  console.log(name);
+  if (description) {
+    console.log(description);
+  }
+};
 
 /**
- * @param {{query: Record<string, string>, headers: Record<string, string>, method: string, path: string}} request
+ * @param {{query: Record<string, string>, headers: Record<string, string>, method: string, path: string, description: string}} request
  */
-const logRequest = ({ headers, query, method, path }) => {
+const logRequest = ({ headers, query, method, path, description }) => {
   const queryJoined = Object.entries(query).map(pair => pair.join('=')).join('&');
   const q = Object.entries(query).length === 0 ? '' : '?';
   console.log(`\n${method.toUpperCase()} ${path}${q}${queryJoined}\n`);
+  if (description) {
+    console.log(description);
+  }
   console.log(headers);
   console.log('');
 };
@@ -52,6 +65,7 @@ const runner = async (s) => {
     name: '',
     method: 'get',
     query: {},
+    description: '',
     headers: {},
     path: '',
     parse: true,
@@ -68,10 +82,11 @@ const runner = async (s) => {
   let tIdx = 0;
   for (const t of suite.tests) {
     const test = {
-      name: `test #${tIdx}`,
+      name: `Test Case #${tIdx} :: ${join(suite.path, t.path)}`,
       method: suite.method,
       parse: suite.parse,
       mode: suite.mode,
+      description: '',
       ...t,
       response: {
         status: suite.response.status,
@@ -97,6 +112,7 @@ const runner = async (s) => {
         method: test.method,
         mode: test.mode,
         parse: test.parse,
+        description: '',
         ...rq,
         response: {
           status: test.response.status,

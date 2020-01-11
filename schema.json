@@ -103,6 +103,9 @@
         "query": {
           "$ref": "#/definitions/dict"
         },
+        "description": {
+          "type": "string"
+        },
         "path": {
           "type": "string"
         },

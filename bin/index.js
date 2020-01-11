@@ -1,45 +1,57 @@
 #!/usr/bin/env node
-const { lstat, readFile } = require('fs').promises;
-const { join } = require('path');
+const {lstat, readFile, readdir} = require('fs').promises;
+const {join, resolve} = require('path');
 
 const program = require('commander');
-const glob = require('glob');
 
-const package = require('../package.json');
+const {description, name, version} = require('../package.json');
 const runner = require('../src/lib.js');
 
 /**
- * @param {string} file
- * @return {Promise<*[]>}
+ * @param {...string} nodes
  */
-const collectFiles = async file => {
-  if ((await lstat(file)).isFile())  {
-    return [file];
-  }
-  const files = await (new Promise(((resolve, reject) => glob(join(file, '*.json'), {}, (err, files) => err ? reject(err) : resolve(files)))));
-  return files.filter(async p => (await lstat(p)).isFile());
-};
-
-program
-.version(package.version)
-.description(package.description)
-.name(package.name)
-.arguments('<file> [env]')
-.action(async (file, env) => {
-  for (const fName of await collectFiles(file)) {
-    console.time('suite took');
-    try {
-      /** @type {string} */
-      const text = await readFile(fName, { encoding: 'utf-8' });
-      await runner(JSON.parse(text));
-    } catch (e) {
-      console.error(e);
-    } finally {
-      console.log('');
-      console.timeEnd('suite took');
+async function* collectFiles(...nodes) {
+  /**
+   * @type {Array<Promise<Array<string>>>}
+   */
+  for (const n of nodes) {
+    const stats = await lstat(n);
+    if (stats.isFile()) {
+      yield resolve(n);
+    } else if (stats.isDirectory()) {
+      const children = await readdir(n);
+      for (const c of children.map(c => join(n, c))) {
+        const s = await lstat(c);
+        if (s.isDirectory()) {
+          yield* collectFiles(c);
+        } else if (s.isFile() && c.endsWith('.json')) {
+          yield c;
+        }
+      }
     }
   }
-});
+}
+
+program.version(version).
+  description(description).
+  name(name).
+  arguments('<file> [files...]').
+  action(async (file, files) => {
+    for await (const fPath of collectFiles(file, ...files)) {
+      console.time('suite took');
+      try {
+        await runner(
+          fPath.endsWith('.js')
+            ? require(fPath)
+            : JSON.parse(await readFile(fPath, { encoding: 'utf-8' })));
+      } catch (e) {
+        console.error(e);
+      } finally {
+        console.log('');
+        console.timeEnd('suite took');
+      }
+    }
+  });
 
 program.parse(process.argv);
 
