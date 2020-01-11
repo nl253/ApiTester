@@ -47,7 +47,7 @@ const logResponse = ({ headers, body, statusCode, statusMessage }) => {
   console.log(body);
 };
 
-const f = async (s) => {
+const runner = async (s) => {
   const suite = {
     name: '',
     method: 'get',
@@ -149,4 +149,4 @@ const f = async (s) => {
   }
 };
 
-module.exports = f;
+module.exports = runner;

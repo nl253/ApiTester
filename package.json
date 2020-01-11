@@ -50,9 +50,10 @@
     "email": "norbertlogiewa96@gmail.com"
   },
   "dependencies": {
-    "yargs": "^15.1.0",
     "ajv": "latest",
     "chai": "^4.2.0",
+    "commander": "^4.1.0",
+    "glob": "^7.1.6",
     "request": "^2.88.0",
     "request-promise-native": "^1.0.8"
   },
