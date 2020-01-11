@@ -3,14 +3,21 @@ const {lstat, readFile, readdir} = require('fs').promises;
 const {join, resolve} = require('path');
 
 const program = require('commander');
+const chalk = require('chalk');
 
 const {description, name, version} = require('../package.json');
 const runner = require('../src/lib.js');
 
+console._error = console.error;
+console.error = (...msg) => console._error(chalk.red(msg.map(m => m.toString()).join(' ')));
+
+console._warn = console.warn;
+console.warn = (...msg) => console._warn(chalk.yellow(msg.map(m => m.toString()).join(' ')));
+
 /**
  * @param {...string} nodes
  */
-async function* collectFiles(...nodes) {
+const collectFiles = async function*(...nodes) {
   /**
    * @type {Array<Promise<Array<string>>>}
    */
@@ -30,7 +37,7 @@ async function* collectFiles(...nodes) {
       }
     }
   }
-}
+};
 
 program.version(version).
   description(description).
@@ -40,15 +47,15 @@ program.version(version).
     for await (const fPath of collectFiles(file, ...files)) {
       console.time('suite took');
       try {
-        await runner(
+        for await (const t of runner(
           fPath.endsWith('.js')
             ? require(fPath)
-            : JSON.parse(await readFile(fPath, { encoding: 'utf-8' })));
-      } catch (e) {
-        console.error(e);
-      } finally {
+            : JSON.parse(await readFile(fPath, { encoding: 'utf-8' })))) {}
         console.log('');
         console.timeEnd('suite took');
+      } catch (e) {
+        console.log('');
+        console.error('ERROR', e.message);
       }
     }
   });
