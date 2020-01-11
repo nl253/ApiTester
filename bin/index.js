@@ -3,16 +3,10 @@ const {lstat, readFile, readdir} = require('fs').promises;
 const {join, resolve} = require('path');
 
 const program = require('commander');
-const {red, yellow} = require('chalk');
 
 const {description, name, version} = require('../package.json');
 const run = require('../src/lib.js');
-
-console._error = console.error;
-console.error = (...msg) => console._error(red(msg.map(m => m.toString()).join(' ')));
-
-console._warn = console.warn;
-console.warn = (...msg) => console._warn(yellow(msg.map(m => m.toString()).join(' ')));
+const Logger = require('./logger');
 
 /**
  * @param {...string} nodes
@@ -41,23 +35,25 @@ program
   .description(description)
   .name(name)
   .option('--silent', 'Only report failures', false)
+  .option('--logging <n>', 'Set logging threshold', '2')
   .arguments('<file> [files...]')
-  .action(async (file, files, { silent }) => {
+  .action(async (file, files, { silent, logging }) => {
+    const log = new Logger(silent === true ? 3 : parseInt(logging));
     for await (const fPath of collectFiles(file, ...files)) {
-      console.time('suite took');
+      log.startTime();
       try {
       // eslint-disable-next-line no-unused-vars
-        const opts = { silent };
+        const opts = { log };
         const spec = fPath.endsWith('.js')
           ? require(fPath)
           : JSON.parse(await readFile(fPath, {encoding: 'utf-8'}));
         // eslint-disable-next-line no-empty
         for await (const _ of run(spec, opts)) {}
-        console.log('');
-        console.timeEnd('suite took');
       } catch (e) {
-        console.log('');
-        console.error('ERROR', e.message);
+        log.error(`ERROR ${e.message}`);
+      } finally {
+        log.log('');
+        log.endTime();
       }
     }
   });
