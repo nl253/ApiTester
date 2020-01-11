@@ -18,14 +18,9 @@ const collectFiles = async function* (...nodes) {
       yield resolve(n);
     } else if (stats.isDirectory()) {
       const children = await readdir(n);
-      for (const c of children.map(c => join(n, c))) {
-        const s = await lstat(c);
-        if (s.isDirectory()) {
-          yield* collectFiles(c);
-        } else if (s.isFile() && c.endsWith('.json')) {
-          yield c;
-        }
-      }
+      const resolved = children.map(c => join(n, c));
+      const jsonFiles = resolved.filter(p => p.endsWith('.json'));
+      yield * collectFiles(...jsonFiles);
     }
   }
 };
