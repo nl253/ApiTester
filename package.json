@@ -21,9 +21,9 @@
   "readme": "./README.md",
   "homepage": "",
   "files": [
-    "./src/*.js",
-    "./bin/*.js",
-    "schema.json"
+    "./src/lib.js",
+    "./bin/index.js",
+    "./schema.json"
   ],
   "engineStrict": true,
   "engines": {
