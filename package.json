@@ -30,6 +30,7 @@
     "node": ">=10"
   },
   "scripts": {
+    "example": "npm run start ./examples/1.json",
     "start": "node ./bin/index.js"
   },
   "repository": {
