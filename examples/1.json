@@ -8,10 +8,6 @@
   },
   "tests": [
     {
-      "path": "/"
-
-    },
-    {
       "path": "/define",
       "mode": "schema",
       "parse": false,

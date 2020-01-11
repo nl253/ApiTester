@@ -27,14 +27,21 @@
   "engines": {
     "node": ">=10"
   },
+  "scripts": {
+    "start": "node ./bin/index.js"
+  },
   "repository": {
     "type": "git",
     "url": "https://github.com/nl253/ApiTester"
   },
   "directories": {
+    "bin": "./bin",
     "doc": "./docs",
-    "lib": "./",
+    "lib": "./src",
     "example": "./examples"
+  },
+  "bin": {
+    "api-test": "./bin/index.js"
   },
   "bugs": {
     "url": "https://github.com/nl253/ApiTester/issues",
@@ -46,7 +53,7 @@
     "request": "^2.88.0",
     "request-promise-native": "^1.0.8"
   },
-  "main": "lib.js",
+  "main": "./bin/index.js",
   "keywords": [
     "api",
     "test",

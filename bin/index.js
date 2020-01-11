@@ -1,6 +1,7 @@
+#!/usr/bin/env node
 const fs = require('fs').promises;
 
-const f = require('./lib');
+const f = require('../src/lib.js');
 
 const fName = process.argv[process.argv.length - 1];
 
