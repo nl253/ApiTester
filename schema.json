@@ -1,0 +1,176 @@
+{
+  "$id": "test-suite",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "additionalItems": true,
+  "definitions": {
+    "body": {
+      "anyOf": [
+        {
+          "type": [
+            "array",
+            "boolean",
+            "integer",
+            "null",
+            "object",
+            "string"
+          ]
+        },
+        {
+          "$ref": "http://json-schema.org/draft-07/schema#"
+        }
+      ]
+    },
+    "method": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "[a-zA-Z]+"
+    },
+    "dict": {
+      "type": "object",
+      "patternProperties": {
+        ".+": {
+          "type": "string"
+        }
+      },
+      "additionalItems": true
+    },
+    "mode": {
+      "enum": [
+        "exact",
+        "schema"
+      ]
+    },
+    "request": {
+      "additionalItems": true,
+      "properties": {
+        "body": {
+          "$ref": "#/definitions/body"
+        },
+        "description": {
+          "type": "string"
+        },
+        "headers": {
+          "$ref": "#/definitions/dict"
+        },
+        "method": {
+          "$ref": "#/definitions/method"
+        },
+        "mode": {
+          "$ref": "#/definitions/mode"
+        },
+        "name": {
+          "type": "string"
+        },
+        "parse": {
+          "type": "boolean"
+        },
+        "path": {
+          "type": "string"
+        },
+        "query": {
+          "$ref": "#/definitions/dict"
+        },
+        "response": {
+          "$ref": "#/definitions/response"
+        }
+      },
+      "type": "object"
+    },
+    "response": {
+      "additionalItems": true,
+      "properties": {
+        "body": {
+          "$ref": "#/definitions/body"
+        },
+        "headers": {
+          "$ref": "#/definitions/dict"
+        },
+        "status": {
+          "type": "integer"
+        }
+      },
+      "type": "object"
+    },
+    "test": {
+      "additionalItems": true,
+      "properties": {
+        "mode": {
+          "$ref": "#/definitions/mode"
+        },
+        "method": {
+          "$ref": "#/definitions/method"
+        },
+        "query": {
+          "$ref": "#/definitions/dict"
+        },
+        "path": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "parse": {
+          "type": "boolean"
+        },
+        "request": {
+          "oneOf": [
+            {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/request"
+              }
+            },
+            {
+              "$ref": "#/definitions/request"
+            }
+          ]
+        },
+        "response": {
+          "$ref": "#/definitions/response"
+        }
+      },
+      "type": "object"
+    }
+  },
+  "description": "test suite schema",
+  "properties": {
+    "description": {
+      "type": "string"
+    },
+    "headers": {
+      "$ref": "#/definitions/dict"
+    },
+    "method": {
+      "$ref": "#/definitions/method"
+    },
+    "mode": {
+      "$ref": "#/definitions/mode"
+    },
+    "name": {
+      "type": "string"
+    },
+    "parse": {
+      "type": "boolean"
+    },
+    "path": {
+      "type": "string"
+    },
+    "query": {
+      "$ref": "#/definitions/dict"
+    },
+    "response": {
+      "$ref": "#/definitions/response"
+    },
+    "request": {
+      "$ref": "#/definitions/request"
+    },
+    "tests": {
+      "items": {
+        "$ref": "#/definitions/test"
+      },
+      "type": "array"
+    }
+  },
+  "title": "Test Suite Schema",
+  "type": "object"
+}

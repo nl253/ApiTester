@@ -1,0 +1,44 @@
+{
+  "$schema": "./../schema.json",
+  "path": "nlp-apim.azure-api.net",
+  "headers": {
+    "Authorization": "d2f3e0bfc5154c0284627b32a3905746",
+    "content-type": "application/json",
+    "accept": "application/json, *"
+  },
+  "tests": [
+    {
+      "path": "/"
+
+    },
+    {
+      "path": "/define",
+      "mode": "schema",
+      "parse": false,
+      "headers": {
+        "accept": "text/plain"
+      },
+      "request": [
+        {
+          "path": "/verb"
+        },
+        {
+          "path": "/cat"
+        },
+        {
+          "path": "/dog"
+        }
+      ],
+      "response": {
+        "body": {
+          "type": "string",
+          "pattern": "^[a-zA-Z0-9 ,.;!?)(\\]\\[]+$",
+          "minLength": 10
+        },
+        "headers": {
+          "content-type": "text/plain; charset=utf-8"
+        }
+      }
+    }
+  ]
+}

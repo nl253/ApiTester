@@ -1,0 +1,63 @@
+{
+  "name": "api-tester",
+  "version": "0.1.0",
+  "description": "API Tester",
+  "private": false,
+  "browserslist": [],
+  "contributors": [
+    {
+      "url": "https://github/nl253",
+      "email": "norbertlogiewa96@gmail.com",
+      "name": "Norbert Logiewa"
+    }
+  ],
+  "maintainers": [
+    {
+      "name": "Norbert Logiewa",
+      "email": "norbertlogiewa96@gmail.com",
+      "url": "https://github/nl253"
+    }
+  ],
+  "readme": "./README.md",
+  "homepage": "",
+  "files": [
+    "*.js"
+  ],
+  "engineStrict": true,
+  "engines": {
+    "node": ">=10"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github/nl253/ApiTester"
+  },
+  "directories": {
+    "doc": "./docs",
+    "lib": "./",
+    "example": "./examples"
+  },
+  "bugs": {
+    "url": "https://github/nl253/ApiTester/issues",
+    "email": "norbertlogiewa96@gmail.com"
+  },
+  "dependencies": {
+    "ajv": "latest",
+    "chai": "^4.2.0",
+    "request": "^2.88.0",
+    "request-promise-native": "^1.0.8"
+  },
+  "main": "lib.js",
+  "keywords": [
+    "api",
+    "test",
+    "integration",
+    "integration-test",
+    "api-test",
+    "api-tester",
+    "automation",
+    "automation-testing",
+    "testing"
+  ],
+  "author": "Norbert Logiewa <norbertlogiewa96@gmail.com>",
+  "license": "MIT"
+}
