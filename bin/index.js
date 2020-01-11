@@ -6,13 +6,26 @@ const program = require('commander');
 const {red, yellow} = require('chalk');
 
 const {description, name, version} = require('../package.json');
-const runner = require('../src/lib.js');
+const run = require('../src/lib.js');
 
 console._error = console.error;
 console.error = (...msg) => console._error(red(msg.map(m => m.toString()).join(' ')));
 
 console._warn = console.warn;
 console.warn = (...msg) => console._warn(yellow(msg.map(m => m.toString()).join(' ')));
+
+/**
+ * @return {Promise<Array<Promise>>}
+ */
+const collectAsyncIter = async (iter) => {
+  const ps = [];
+  let focus;
+  do {
+    focus = iter.next();
+    ps.push(focus);
+  } while (!focus.done);
+  return ps;
+};
 
 /**
  * @param {...string} nodes
@@ -40,17 +53,19 @@ program
   .version(version)
   .description(description)
   .name(name)
+  .option('--silent', 'Only report failures', false)
   .arguments('<file> [files...]')
-  .action(async (file, files) => {
+  .action(async (file, files, { silent }) => {
     for await (const fPath of collectFiles(file, ...files)) {
       console.time('suite took');
       try {
-        // eslint-disable-next-line no-unused-vars
-        for await (const t of runner(
-          fPath.endsWith('.js')
-            ? require(fPath)
-            : JSON.parse(await readFile(fPath, {encoding: 'utf-8'})))) {
-        }
+      // eslint-disable-next-line no-unused-vars
+        const opts = { silent };
+        const spec = fPath.endsWith('.js')
+          ? require(fPath)
+          : JSON.parse(await readFile(fPath, {encoding: 'utf-8'}));
+        // eslint-disable-next-line no-empty
+        for await (const _ of run(spec, opts)) {}
         console.log('');
         console.timeEnd('suite took');
       } catch (e) {

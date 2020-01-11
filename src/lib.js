@@ -30,34 +30,37 @@ const fmtHeaders = headers => {
 
 /**
  * @param {{name: string, path: string, description: string}} suite
+ * @param {boolean} silent
  */
-const logSuite = ({name, path, description}) => {
+const logSuite = ({name, path, description}, silent) => {
   if (name) {
     console.log(cyan(`Test Suite :: ${name} ${path}\n`));
   } else {
     console.log(cyan(`Test Suite :: ${path}\n`));
   }
-  if (description) {
+  if (description && !silent) {
     console.log(description);
   }
 };
 
 /**
  * @param {{name: string, description: string}} test
+ * @param {boolean} silent
  */
-const logTest = ({name, description}) => {
+const logTest = ({name, description}, silent) => {
   console.log(magenta(name));
-  if (description) {
+  if (description && !silent) {
     console.log(description);
   }
 };
 
 /**
  * @param {{query: Record<string, string>, headers: Record<string, string>, method: string, path: string, description: string}} request
+ * @param {boolean} silent
  */
-const logRequest = ({headers, query, method, path, description}) => {
+const logRequest = ({headers, query, method, path, description}, silent) => {
   console.log('');
-  if (Object.keys(query).length === 0) {
+  if (silent || Object.keys(query).length === 0) {
     console.log(yellow(`${method.toUpperCase()} ${path}`));
   } else {
     const queryJoined = Object.entries(query).
@@ -66,6 +69,9 @@ const logRequest = ({headers, query, method, path, description}) => {
     console.log(yellow(`${method.toUpperCase()} ${path}?${queryJoined}`));
   }
   console.log('');
+  if (silent) {
+    return;
+  }
   if (description) {
     console.log(description);
   }
@@ -75,13 +81,16 @@ const logRequest = ({headers, query, method, path, description}) => {
 
 /**
  * @param {{statusMessage: string, statusCode: number, body: *, headers: Record<string, string>}} response
+ * @param {boolean} silent
  */
-const logResponse = ({headers, body, statusCode, statusMessage}) => {
+const logResponse = ({headers, body, statusCode, statusMessage}, silent) => {
   console.log(green(`\n${statusMessage.toUpperCase()} ${statusCode}\n`));
-  console.log(fmtHeaders(headers));
-  console.log('');
-  console.log(body);
-  console.log('');
+  if (!silent) {
+    console.log(fmtHeaders(headers));
+    console.log('');
+    console.log(body);
+    console.log('');
+  }
 };
 
 const getSchemaErrMsg = validate => {
@@ -101,11 +110,12 @@ const getSchemaErrMsg = validate => {
 
 /**
  * @param {{mode: ('exact'|'schema'), description: string, method: string, parse: boolean, body: *, headers: Record<string, string>, path: string, query: Record<string, string>, response: {body: *, status: number, headers: Record<string, string>}}} request
+ * @param {{silent: boolean}} opts
  * @return {Promise<void>}
  */
-const runRequest = async request => {
+const runRequest = async (request, {silent}) => {
   console.group();
-  logRequest(request);
+  logRequest(request, silent);
   console.time('took');
   const res = await rp({
     uri: `https://${(request.path)}`,
@@ -118,7 +128,7 @@ const runRequest = async request => {
   });
   console.timeEnd('took');
   res.headers = normalizeHeaders(res.headers);
-  logResponse(res);
+  logResponse(res, silent);
   assert.equal(res.statusCode, request.response.status);
   for (const k in request.response.headers) {
     assert.equal(!!res.headers[k], true, `header ${k} is on response`);
@@ -135,15 +145,17 @@ const runRequest = async request => {
   } else {
     throw new Error(`mode ${request.mode || 'undefined'} not implemented yet`);
   }
+  console.log(green('[PASS]'));
   console.groupEnd();
 };
 
 /**
  * @param {{name: string, description: string, mode: ('schema'|'exact'), request: {}[], method: string, parse: boolean, headers: Record<string, string>, query: Record<string, string>, path: string, response: {}}} test
+ * @param {{silent: boolean}} opts
  */
-const runTest = async function* (test) {
+const runTest = async function* (test, {silent}) {
   console.group();
-  logTest(test);
+  logTest(test, silent);
   for (let rIdx = 0; rIdx < test.request.length; rIdx++) {
     const r = (test.request)[rIdx];
     yield runRequest({
@@ -165,16 +177,18 @@ const runTest = async function* (test) {
       path: join(test.path, r.path || ''),
       headers: normalizeHeaders({...(test.headers), ...r.headers}),
       query: {...(test.query), ...r.query},
-    });
+    }, {silent});
   }
+  console.log('');
   console.groupEnd();
 };
 
 /**
  * @param {{method: string, name: string, description: string, parse: boolean, mode: ('exact'|'schema'), response: {}, path: string, headers: Record<string, string>, tests: {}[], query: Record<string, string>}} suite
+ * @param {{silent: boolean}} opts
  */
-const runSuite = async function* (suite) {
-  logSuite(suite);
+const runSuite = async function* (suite, {silent}) {
+  logSuite(suite, silent);
   for (let tIdx = 0; tIdx < suite.tests.length; tIdx++) {
     const t = (suite.tests)[tIdx];
     const endpoint = join(suite.path, t.path || '');
@@ -198,14 +212,15 @@ const runSuite = async function* (suite) {
       path: endpoint,
       headers: {...(suite.headers), ...t.headers},
       query: {...(suite.query), ...t.query},
-    });
+    }, {silent});
   }
 };
 
 /**
  * @param {{}} s
+ * @param {{silent: boolean}} opts
  */
-const run = (s) => runSuite({
+const run = (s, {silent}) => runSuite({
   name: '',
   method: 'get',
   query: {},
@@ -221,6 +236,6 @@ const run = (s) => runSuite({
     headers: {},
     ...(s.response || {}),
   },
-});
+}, {silent});
 
 module.exports = run;
