@@ -1,11 +1,11 @@
-const { join } = require('path');
-const { assert } = require('chai');
+const {join} = require('path');
+const {assert} = require('chai');
 
-const { cyan, green, magenta, yellow } = require('chalk');
+const {cyan, green, magenta, yellow} = require('chalk');
 const rp = require('request-promise-native');
 
 const Ajv = require('ajv');
-const ajv = new Ajv({ allErrors: true });
+const ajv = new Ajv({allErrors: true});
 
 /**
  * @param {Record<string, string>} headers
@@ -20,15 +20,18 @@ const normalizeHeaders = headers => {
  * @param {Record<string, string>} headers
  */
 const fmtHeaders = headers => {
-  const padding = Object.keys(headers).map(k => k.length).reduce((x, y) => Math.max(x, y));
-  const fn = ([header, value]) => `${header.padEnd(padding)} ${value.toString()}`;
+  const padding = Object.keys(headers).
+    map(k => k.length).
+    reduce((x, y) => Math.max(x, y));
+  const fn = ([header, value]) => `${header.padEnd(
+    padding)} ${value.toString()}`;
   return Object.entries(headers).map(fn).join('\n');
 };
 
 /**
  * @param {{name: string, path: string, description: string}} suite
  */
-const logSuite = ({ name, path, description }) => {
+const logSuite = ({name, path, description}) => {
   if (name) {
     console.log(cyan(`Test Suite :: ${name} ${path}\n`));
   } else {
@@ -42,7 +45,7 @@ const logSuite = ({ name, path, description }) => {
 /**
  * @param {{name: string, description: string}} test
  */
-const logTest = ({ name, description }) => {
+const logTest = ({name, description}) => {
   console.log(magenta(name));
   if (description) {
     console.log(description);
@@ -52,12 +55,14 @@ const logTest = ({ name, description }) => {
 /**
  * @param {{query: Record<string, string>, headers: Record<string, string>, method: string, path: string, description: string}} request
  */
-const logRequest = ({ headers, query, method, path, description }) => {
+const logRequest = ({headers, query, method, path, description}) => {
   console.log('');
   if (Object.keys(query).length === 0) {
     console.log(yellow(`${method.toUpperCase()} ${path}`));
   } else {
-    const queryJoined = Object.entries(query).map(pair => pair.join('=')).join('&');
+    const queryJoined = Object.entries(query).
+      map(pair => pair.join('=')).
+      join('&');
     console.log(yellow(`${method.toUpperCase()} ${path}?${queryJoined}`));
   }
   console.log('');
@@ -71,7 +76,7 @@ const logRequest = ({ headers, query, method, path, description }) => {
 /**
  * @param {{statusMessage: string, statusCode: number, body: *, headers: Record<string, string>}} response
  */
-const logResponse = ({ headers, body, statusCode, statusMessage }) => {
+const logResponse = ({headers, body, statusCode, statusMessage}) => {
   console.log(green(`\n${statusMessage.toUpperCase()} ${statusCode}\n`));
   console.log(fmtHeaders(headers));
   console.log('');
@@ -86,105 +91,104 @@ const logResponse = ({ headers, body, statusCode, statusMessage }) => {
 const runRequest = async request => {
   console.group();
   logRequest(request);
-  const {mode, method, parse, body, headers, path, query, response} = request;
-  const uri = `https://${path}`;
   console.time('took');
-  const res = await rp({ uri, method, headers, qs: query, body, json: parse, resolveWithFullResponse: true });
+  const res = await rp({
+    uri: `https://${(request.path)}`,
+    method: request.method,
+    headers: request.headers,
+    qs: request.query,
+    body: request.body,
+    json: request.parse,
+    resolveWithFullResponse: true,
+  });
   console.timeEnd('took');
   res.headers = normalizeHeaders(res.headers);
   logResponse(res);
-  assert.equal(res.statusCode, response.status);
-  for (const k in response.headers) {
+  assert.equal(res.statusCode, request.response.status);
+  for (const k in request.response.headers) {
     assert.equal(!!res.headers[k], true, `header ${k} is on response`);
-    assert.equal(res.headers[k], response.headers[k]);
+    assert.equal(res.headers[k], request.response.headers[k]);
   }
-  if (mode === 'exact') {
-    assert.deepEqual(res.body, response.body);
-  } else if (mode === 'schema') {
-    const validate = ajv.compile(response.body);
+  if (request.mode === 'exact') {
+    assert.deepEqual(res.body, request.response.body);
+  } else if (request.mode === 'schema') {
+    const validate = ajv.compile(request.response.body);
     const valid = validate(res.body);
     if (!valid) {
-      const msg = validate
-      .errors
-      .map(e => [
+      const msg = validate.errors.map(e => [
           e.message,
           e.data,
           e.dataPath,
           e.keyword,
           e.propertyName,
           e.schemaPath,
-        ]
-        .map(info => info || '')
-        .filter(Boolean)
-        .map(info => info.toString())
-        .join(', ')
+        ].map(info => info || '').
+          filter(Boolean).
+          map(info => info.toString()).
+          join(', '),
       ).join(', ');
       throw new Error(`schema validation failed ${msg}`);
     }
   } else {
-    throw new Error(`mode ${mode || 'undefined'} not implemented yet`);
+    throw new Error(`mode ${request.mode || 'undefined'} not implemented yet`);
   }
   console.groupEnd();
 };
 
-const runTest = async function*(test) {
+const runTest = async function* (test) {
   console.group();
   logTest(test);
-  const {mode, method, request, parse, query, headers, path, response} = test;
-  for (let rIdx = 0; rIdx < request.length; rIdx++) {
-    const r = request[rIdx];
-    const name = `Request #${rIdx}`;
+  for (let rIdx = 0; rIdx < test.request.length; rIdx++) {
+    const r = (test.request)[rIdx];
     yield runRequest({
-      name,
-      method,
-      mode,
-      parse,
+      name: `Request #${rIdx}`,
+      method: test.method,
+      mode: test.mode,
+      parse: test.parse,
       description: '',
       ...r,
       response: {
-        status: response.status,
+        status: test.response.status,
         ...(r.response || {}),
-        ...response,
+        ...(test.response),
         headers: normalizeHeaders({
-          ...response.headers,
+          ...test.response.headers,
           ...((r.response || {headers: {}}).headers || {}),
         }),
       },
-      path: join(path, r.path || ''),
-      headers: normalizeHeaders({...headers, ...r.headers}),
-      query: {...query, ...r.query},
+      path: join(test.path, r.path || ''),
+      headers: normalizeHeaders({...(test.headers), ...r.headers}),
+      query: {...(test.query), ...r.query},
     });
   }
   console.groupEnd();
 };
 
-const runSuite = async function*(suite) {
+const runSuite = async function* (suite) {
   logSuite(suite);
-  const {mode, method, parse, tests, query, headers, path, response} = suite;
-  for (let tIdx = 0; tIdx < tests.length; tIdx++) {
-    const t = tests[tIdx];
-    const endpoint = join(path, t.path || '');
-    const name = `Test Case #${tIdx} :: ${endpoint}`;
+  for (let tIdx = 0; tIdx < suite.tests.length; tIdx++) {
+    const t = (suite.tests)[tIdx];
+    const endpoint = join(suite.path, t.path || '');
     yield* runTest({
-      name,
-      method,
-      parse,
-      mode,
+      name: `Test Case #${tIdx} :: ${endpoint}`,
+      method: suite.method,
+      parse: suite.parse,
+      mode: suite.mode,
       description: '',
       ...t,
       request: Array.isArray(t.request) ? t.request : [t.request],
       response: {
-        status: response.status,
+        status: suite.response.status,
         ...(t.response || {}),
-        ...response,
+        ...(suite.response),
         headers: {
-          ...response.headers,
+          ...suite.response.headers,
           ...((t.response || {headers: {}}).headers || {}),
         },
       },
       path: endpoint,
-      headers: {...headers, ...t.headers},
-      query: {...query, ...t.query},
+      headers: {...(suite.headers), ...t.headers},
+      query: {...(suite.query), ...t.query},
     });
   }
 };
