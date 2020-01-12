@@ -41,7 +41,7 @@
   ],
   "engines": {
     "node": ">=12",
-    "npm": ">= 6.4.1"
+    "npm": ">= 6.13.6"
   },
   "engineStrict": true,
   "browserslist": [],
@@ -65,6 +65,7 @@
     "eslint-plugin-promise": "^4.2.1",
     "eslint-plugin-react": "^7.17.0",
     "eslint-plugin-security": "^1.4.0",
+    "husky": "^4.0.7",
     "jest": "^24.9.0",
     "jsdoc": "3.6.3",
     "jsonlint": "^1.6.3",
@@ -104,6 +105,11 @@
       "remark-preset-lint-consistent"
     ]
   },
+  "husky": {
+    "hooks": {
+      "pre-push": "npm run lint"
+    }
+  },
   "bin": {
     "api-test": "bin/index.js"
   },
@@ -111,19 +117,21 @@
     "example": "npm run start ./examples/1.json",
     "start": "node ./bin/index.js",
     "test": "npx jest --ci",
-    "doc": "bash -c \"echo -e 'GENERATING DOCS\\n' && rm -rf ./docs && npx jsdoc --pedantic -d ./docs -R ./README.md ./src/*.js ./bin/*.js\"",
+    "doc": "bash -c \"echo -e 'GENERATING DOCS\\n' && rm -rf ./docs && npx jsdoc --pedantic -d ./docs -R ./README* --recurse ./src ./bin ./examples\"",
     "doc:open": "bash -c \"npm run doc && $BROWSER ./docs/index.html\"",
     "doc:publish": "bash -c \"echo -e 'PUBLISHING DOCS\\n' && npm run doc && git add -f ./docs && git commit -am 'Update docs' -n && git push\"",
-    "lint": "bash -c \"npm run lint:code && npm run lint:doc && npm run lint:deps\"",
-    "lint:code": "bash -c \"npx eslint ./bin/*.js ./src/*.js\"",
-    "lint:doc": "bash -c \"npm run lint:doc:markdown-lint && npm run lint:doc:write-good && npm run lint:doc:remark\"",
-    "lint:doc:write-good": "bash -c \"npx write-good --so --weasel --tooWordy --cliches --thereIs *.md || echo ''\"",
-    "lint:doc:markdown-lint": "bash -c \"npx markdownlint *.md\"",
-    "lint:doc:remark": "bash -c \"npx remark -u lint *.md\"",
+    "lint": "bash -c \"npm run lint:json && npm run lint:js && npm run lint:code && npm run lint:doc && npm run lint:deps\"",
+    "lint:code": "bash -c 'for i in \"$(git ls-files | grep \\.js$ | grep -v docs)\"; do echo $i && npx eslint ./$i; done'",
+    "lint:json": "bash -c 'for i in \"$(git ls-files | grep \\.json$ | grep -v docs)\"; do echo $i && npx jsonlint ./$i; done'",
+    "lint:js": "npx acorn --allow-hash-bang --ecma9 ./bin/index.js",
+    "lint:doc": "bash -c 'for i in \"$(git ls-files | grep \\.md$ | grep -v docs)\"; do echo $i && npm run lint:doc:markdown-lint && npm run lint:doc:write-good && npm run lint:doc:remark; done'",
+    "lint:doc:write-good": "bash -c 'for i in \"$(git ls-files | grep \\.md$ | grep -v docs)\"; do echo $i && npx write-good --so --weasel --tooWordy --cliches --thereIs $i || echo ''; done'",
+    "lint:doc:markdown-lint": "bash -c 'for i in \"$(git ls-files | grep \\.md$ | grep -v docs)\"; do echo $i && npx markdown-lint $i; done'",
+    "lint:doc:remark": "bash -c 'for i in \"$(git ls-files | grep \\.md$ | grep -v docs)\"; do echo $i && npx remark -u lint $i; done'",
     "lint:deps": "bash -c \"npm run lint:deps:license && npm run lint:deps:security\"",
     "lint:deps:security": "npx retire --js",
     "lint:deps:license": "npx license-checker --summary",
-    "loc": "bash -c \"tokei -- $(git ls-files | grep -v docs | grep -v bin)\"",
+    "loc": "bash -c \"tokei -- $(git ls-files | grep -v docs)\"",
     "prepublishOnly": "npm run doc:publish"
   }
 }
