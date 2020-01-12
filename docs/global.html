@@ -104,7 +104,7 @@
     
 
     
-    <h4 class="name" id="collectFiles"><span class="type-signature">(async, generator) </span>collectFiles<span class="signature">(&hellip;nodes)</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="collectFiles"><span class="type-signature">(async, generator) </span>collectFiles<span class="signature">(&hellip;nodes)</span><span class="type-signature"> &rarr; {Promise.&lt;{done: boolean, value: string}>}</span></h4>
     
 
     
@@ -213,7 +213,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="bin_index.js.html">bin/index.js</a>, <a href="bin_index.js.html#line14">line 14</a>
+        <a href="bin_index.js.html">bin/index.js</a>, <a href="bin_index.js.html#line16">line 16</a>
     </li></ul></dd>
     
 
@@ -238,8 +238,44 @@
 
 
 
+<h5>Returns:</h5>
+
+        
 
 
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">AsyncGenerator.&lt;string></span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+<h5>Yields:</h5>
+
+        
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Promise.&lt;{done: boolean, value: string}></span>
+
+
+    </dd>
+</dl>
+
+    
 
 
 
@@ -346,7 +382,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="src_utils.js.html">src/utils.js</a>, <a href="src_utils.js.html#line13">line 13</a>
+        <a href="src_utils.js.html">src/utils.js</a>, <a href="src_utils.js.html#line17">line 17</a>
     </li></ul></dd>
     
 
@@ -371,6 +407,157 @@
 
 
 
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="getSchemaErrMsg"><span class="type-signature"></span>getSchemaErrMsg<span class="signature">(validate)</span><span class="type-signature"> &rarr; {string}</span></h4>
+    
+
+    
+
+
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>validate</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Object</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="src_utils.js.html">src/utils.js</a>, <a href="src_utils.js.html#line35">line 35</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">string</span>
+
+
+    </dd>
+</dl>
+
+    
 
 
 
@@ -451,7 +638,7 @@
             <td class="type">
             
                 
-<span class="param-type">Logger</span>
+<span class="param-type"><a href="Logger.html">Logger</a></span>
 
 
             
@@ -502,7 +689,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="src_logging.js.html">src/logging.js</a>, <a href="src_logging.js.html#line43">line 43</a>
+        <a href="src_logging.js.html">src/logging.js</a>, <a href="src_logging.js.html#line46">line 46</a>
     </li></ul></dd>
     
 
@@ -607,7 +794,7 @@
             <td class="type">
             
                 
-<span class="param-type">Logger</span>
+<span class="param-type"><a href="Logger.html">Logger</a></span>
 
 
             
@@ -658,7 +845,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="src_logging.js.html">src/logging.js</a>, <a href="src_logging.js.html#line71">line 71</a>
+        <a href="src_logging.js.html">src/logging.js</a>, <a href="src_logging.js.html#line74">line 74</a>
     </li></ul></dd>
     
 
@@ -763,7 +950,7 @@
             <td class="type">
             
                 
-<span class="param-type">Logger</span>
+<span class="param-type"><a href="Logger.html">Logger</a></span>
 
 
             
@@ -814,7 +1001,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="src_logging.js.html">src/logging.js</a>, <a href="src_logging.js.html#line13">line 13</a>
+        <a href="src_logging.js.html">src/logging.js</a>, <a href="src_logging.js.html#line16">line 16</a>
     </li></ul></dd>
     
 
@@ -919,7 +1106,7 @@
             <td class="type">
             
                 
-<span class="param-type">Logger</span>
+<span class="param-type"><a href="Logger.html">Logger</a></span>
 
 
             
@@ -970,7 +1157,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="src_logging.js.html">src/logging.js</a>, <a href="src_logging.js.html#line27">line 27</a>
+        <a href="src_logging.js.html">src/logging.js</a>, <a href="src_logging.js.html#line30">line 30</a>
     </li></ul></dd>
     
 
@@ -1157,7 +1344,7 @@
     
 
     
-    <h4 class="name" id="run"><span class="type-signature"></span>run<span class="signature">(s, opts)</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="run"><span class="type-signature"></span>run<span class="signature">(s, opts)</span><span class="type-signature"> &rarr; {Promise.&lt;{value: void, done: boolean}>}</span></h4>
     
 
     
@@ -1277,7 +1464,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="src_lib.js.html">src/lib.js</a>, <a href="src_lib.js.html#line155">line 155</a>
+        <a href="src_lib.js.html">src/lib.js</a>, <a href="src_lib.js.html#line165">line 165</a>
     </li></ul></dd>
     
 
@@ -1304,6 +1491,24 @@
 
 
 
+<h5>Yields:</h5>
+
+        
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Promise.&lt;{value: void, done: boolean}></span>
+
+
+    </dd>
+</dl>
+
+    
 
 
 
@@ -1433,7 +1638,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="src_lib.js.html">src/lib.js</a>, <a href="src_lib.js.html#line33">line 33</a>
+        <a href="src_lib.js.html">src/lib.js</a>, <a href="src_lib.js.html#line37">line 37</a>
     </li></ul></dd>
     
 
@@ -1487,7 +1692,7 @@
     
 
     
-    <h4 class="name" id="runSuite"><span class="type-signature">(async, generator) </span>runSuite<span class="signature">(suite, opts)</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="runSuite"><span class="type-signature">(async, generator) </span>runSuite<span class="signature">(suite, opts)</span><span class="type-signature"> &rarr; {Promise.&lt;{value: void, done: boolean}>}</span></h4>
     
 
     
@@ -1607,7 +1812,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="src_lib.js.html">src/lib.js</a>, <a href="src_lib.js.html#line122">line 122</a>
+        <a href="src_lib.js.html">src/lib.js</a>, <a href="src_lib.js.html#line131">line 131</a>
     </li></ul></dd>
     
 
@@ -1634,6 +1839,24 @@
 
 
 
+<h5>Yields:</h5>
+
+        
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Promise.&lt;{value: void, done: boolean}></span>
+
+
+    </dd>
+</dl>
+
+    
 
 
 
@@ -1643,7 +1866,7 @@
     
 
     
-    <h4 class="name" id="runTest"><span class="type-signature">(async, generator) </span>runTest<span class="signature">(test, opts)</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="runTest"><span class="type-signature">(async, generator) </span>runTest<span class="signature">(test, opts)</span><span class="type-signature"> &rarr; {Promise.&lt;{value: void, done: boolean}>}</span></h4>
     
 
     
@@ -1763,7 +1986,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="src_lib.js.html">src/lib.js</a>, <a href="src_lib.js.html#line81">line 81</a>
+        <a href="src_lib.js.html">src/lib.js</a>, <a href="src_lib.js.html#line88">line 88</a>
     </li></ul></dd>
     
 
@@ -1790,6 +2013,24 @@
 
 
 
+<h5>Yields:</h5>
+
+        
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Promise.&lt;{value: void, done: boolean}></span>
+
+
+    </dd>
+</dl>
+
+    
 
 
 
@@ -1809,13 +2050,13 @@
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#collectFiles">collectFiles</a></li><li><a href="global.html#fmtHeaders">fmtHeaders</a></li><li><a href="global.html#logRequest">logRequest</a></li><li><a href="global.html#logResponse">logResponse</a></li><li><a href="global.html#logSuite">logSuite</a></li><li><a href="global.html#logTest">logTest</a></li><li><a href="global.html#normalizeHeaders">normalizeHeaders</a></li><li><a href="global.html#run">run</a></li><li><a href="global.html#runRequest">runRequest</a></li><li><a href="global.html#runSuite">runSuite</a></li><li><a href="global.html#runTest">runTest</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#collectFiles">collectFiles</a></li><li><a href="global.html#fmtHeaders">fmtHeaders</a></li><li><a href="global.html#getSchemaErrMsg">getSchemaErrMsg</a></li><li><a href="global.html#logRequest">logRequest</a></li><li><a href="global.html#logResponse">logResponse</a></li><li><a href="global.html#logSuite">logSuite</a></li><li><a href="global.html#logTest">logTest</a></li><li><a href="global.html#normalizeHeaders">normalizeHeaders</a></li><li><a href="global.html#run">run</a></li><li><a href="global.html#runRequest">runRequest</a></li><li><a href="global.html#runSuite">runSuite</a></li><li><a href="global.html#runTest">runTest</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.3</a> on Sun Jan 12 2020 11:23:29 GMT+0000 (Greenwich Mean Time)
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.3</a> on Sun Jan 12 2020 20:48:29 GMT+0000 (Greenwich Mean Time)
 </footer>
 
 <script> prettyPrint(); </script>

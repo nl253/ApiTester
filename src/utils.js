@@ -4,8 +4,8 @@
  */
 const normalizeHeaders = (headers) => {
   /**
-   * @param {[string, string]} pair
-   * @return {[string, string]}
+   * @param {string[]} pair
+   * @return {string[]}
    */
   const fn = ([header, value]) => [header.toLocaleLowerCase(), value];
   return Object.fromEntries(Object.entries(headers).map(fn));
@@ -19,7 +19,7 @@ const fmtHeaders = (headers) => {
     .map((k) => k.length)
     .reduce((x, y) => Math.max(x, y));
   /**
-   * @param {[string, string]} pair
+   * @param {string[]} pair
    * @return {string}
    */
   const fn = ([header, value]) => `${header.padEnd(
