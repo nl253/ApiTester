@@ -46,7 +46,7 @@ const runRequest = async (request, { log }) => {
   res.headers = normalizeHeaders(res.headers);
   logResponse(res, log);
   assert.equal(res.statusCode, request.response.status);
-  for (const k in request.response.headers) {
+  for (const k of Object.keys(request.response.headers)) {
     assert.equal(!!res.headers[k], true, `header ${k} is on response`);
     assert.equal(res.headers[k], request.response.headers[k]);
   }

@@ -80,21 +80,21 @@
     "retire": "^2.0.3",
     "write-good": "^1.0.2"
   },
-  "main": "./bin/index.js",
+  "main": "bin/index.js",
   "directories": {
-    "bin": "./bin",
-    "doc": "./docs",
-    "example": "./examples",
-    "lib": "./src"
+    "bin": "bin",
+    "doc": "docs",
+    "example": "examples",
+    "lib": "src"
   },
   "files": [
-    "./README.md",
-    "./schema.json",
-    "./bin/index.js",
-    "./src/logger.js",
-    "./src/lib.js",
-    "./src/logging.js",
-    "./src/utils.js"
+    "README.md",
+    "schema.json",
+    "bin/index.js",
+    "src/logger.js",
+    "src/lib.js",
+    "src/logging.js",
+    "src/utils.js"
   ],
   "private": false,
   "remarkConfig": {
@@ -105,7 +105,7 @@
     ]
   },
   "bin": {
-    "api-test": "./bin/index.js"
+    "api-test": "bin/index.js"
   },
   "scripts": {
     "example": "npm run start ./examples/1.json",

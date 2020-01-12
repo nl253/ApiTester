@@ -1,4 +1,4 @@
-/* eslint-disable global-require */
+#!/usr/bin/env node
 const { lstat, readFile, readdir } = require('fs').promises;
 const { join, resolve } = require('path');
 
@@ -38,9 +38,11 @@ program
       log.startTime();
       try {
         const spec = fPath.endsWith('.js')
+          // eslint-disable-next-line max-len
+          // eslint-disable-next-line import/no-dynamic-require,security/detect-non-literal-require,global-require
           ? require(fPath)
           : JSON.parse(await readFile(fPath, { encoding: 'utf-8' }));
-        // eslint-disable-next-line no-empty
+        // eslint-disable-next-line no-empty,no-unused-vars
         for await (const _ of run(spec, { log })) {}
       } catch (e) {
         log.error(`ERROR ${e.message}`);

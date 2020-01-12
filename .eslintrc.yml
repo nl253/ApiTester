@@ -50,6 +50,7 @@ rules:
   guard-for-in: off
   no-await-in-loop: off
   radix: off
+  func-names: off
   semi:
     - error
     - always
