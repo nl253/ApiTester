@@ -1,12 +1,12 @@
-#!/usr/bin/env node
-const {lstat, readFile, readdir} = require('fs').promises;
-const {join, resolve} = require('path');
+/* eslint-disable global-require */
+const { lstat, readFile, readdir } = require('fs').promises;
+const { join, resolve } = require('path');
 
 const program = require('commander');
 
-const {description, name, version} = require('../package.json');
+const { description, name, version } = require('../package.json');
 const run = require('../src/lib.js');
-const Logger = require('./logger');
+const Logger = require('../src/logger.js');
 
 /**
  * @param {...string} nodes
@@ -18,9 +18,9 @@ const collectFiles = async function* (...nodes) {
       yield resolve(n);
     } else if (stats.isDirectory()) {
       const children = await readdir(n);
-      const resolved = children.map(c => join(n, c));
-      const jsonFiles = resolved.filter(p => p.endsWith('.json'));
-      yield * collectFiles(...jsonFiles);
+      const resolved = children.map((c) => join(n, c));
+      const jsonFiles = resolved.filter((p) => p.endsWith('.json'));
+      yield* collectFiles(...jsonFiles);
     }
   }
 };
@@ -37,13 +37,11 @@ program
     for await (const fPath of collectFiles(file, ...files)) {
       log.startTime();
       try {
-      // eslint-disable-next-line no-unused-vars
-        const opts = { log };
         const spec = fPath.endsWith('.js')
           ? require(fPath)
-          : JSON.parse(await readFile(fPath, {encoding: 'utf-8'}));
+          : JSON.parse(await readFile(fPath, { encoding: 'utf-8' }));
         // eslint-disable-next-line no-empty
-        for await (const _ of run(spec, opts)) {}
+        for await (const _ of run(spec, { log })) {}
       } catch (e) {
         log.error(`ERROR ${e.message}`);
       } finally {
