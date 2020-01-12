@@ -107,7 +107,7 @@
   },
   "husky": {
     "hooks": {
-      "pre-push": "npm run lint"
+      "pre-push": "npm run lint && npm run doc"
     }
   },
   "bin": {
@@ -117,9 +117,8 @@
     "example": "npm run start ./examples/1.json",
     "start": "node ./bin/index.js",
     "test": "npx jest --ci",
-    "doc": "bash -c \"echo -e 'GENERATING DOCS\\n' && rm -rf ./docs && npx jsdoc --pedantic -d ./docs -R ./README* --recurse ./src ./bin ./examples\"",
+    "doc": "bash -c \"echo -e 'GENERATING DOCS\\n' && rm -rf ./docs && npx jsdoc --pedantic -d ./docs -R ./README* --recurse ./src ./bin ./examples && git add -f ./docs && git commit -am 'Update docs' -n\"",
     "doc:open": "bash -c \"npm run doc && $BROWSER ./docs/index.html\"",
-    "doc:publish": "bash -c \"echo -e 'PUBLISHING DOCS\\n' && npm run doc && git add -f ./docs && git commit -am 'Update docs' -n && git push\"",
     "lint": "bash -c \"npm run lint:json && npm run lint:js && npm run lint:code && npm run lint:doc && npm run lint:deps\"",
     "lint:code": "bash -c 'for i in \"$(git ls-files | grep \\.js$ | grep -v docs)\"; do echo $i && npx eslint ./$i; done'",
     "lint:json": "bash -c 'for i in \"$(git ls-files | grep \\.json$ | grep -v docs)\"; do echo $i && npx jsonlint ./$i; done'",
@@ -128,7 +127,7 @@
     "lint:doc:write-good": "bash -c 'for i in \"$(git ls-files | grep \\.md$ | grep -v docs)\"; do echo $i && npx write-good --so --weasel --tooWordy --cliches --thereIs $i || echo ''; done'",
     "lint:doc:markdown-lint": "bash -c 'for i in \"$(git ls-files | grep \\.md$ | grep -v docs)\"; do echo $i && npx markdown-lint $i; done'",
     "lint:doc:remark": "bash -c 'for i in \"$(git ls-files | grep \\.md$ | grep -v docs)\"; do echo $i && npx remark -u lint $i; done'",
-    "lint:deps": "bash -c \"npm run lint:deps:license && npm run lint:deps:security\"",
+    "lint:deps": "bash -c \"npm audit && npm run lint:deps:license && npm run lint:deps:security\"",
     "lint:deps:security": "npx retire --js",
     "lint:deps:license": "npx license-checker --summary",
     "loc": "bash -c \"tokei -- $(git ls-files | grep -v docs)\"",

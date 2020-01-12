@@ -27,24 +27,22 @@ jobs:
         run: npm install
       - name: Validate JSON
         shell: bash
-        run: f() { for i in ./*.json ./examples/*.json; do npx jsonlint "$i" || return 1; done; }; f
+        run: npm run lint:json
       - name: Validate JavaScript
         shell: bash
-        run: npx acorn --ecma9 --allow-hash-bang -- ./bin/index.js
+        run: npm run lint:js
       - name: Lint Code
         shell: bash
         run: npm run lint:code
       - name: Lint Docs
         shell: bash
         run: npm run lint:doc
+      - name: Lint Dependencies
+        shell: bash
+        run: npm run lint:deps
       - name: Check JSDoc Types
         shell: bash
         run: npm run doc
 #      - name: Test Code
 #        shell: bash
 #        run: npm test
-      - name: Audit NPM Packages
-        run: npm audit
-      - name: Lint Dependencies
-        shell: bash
-        run: npm run lint:deps
