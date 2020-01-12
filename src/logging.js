@@ -4,6 +4,9 @@ const {
   magenta,
   yellow,
 } = require('chalk');
+
+// eslint-disable-next-line no-unused-vars
+const Logger = require('./logger');
 const { fmtHeaders } = require('./utils');
 
 /**

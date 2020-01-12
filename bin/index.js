@@ -10,6 +10,8 @@ const Logger = require('../src/logger.js');
 
 /**
  * @param {...string} nodes
+ * @yields {Promise<{done: boolean, value: string}>}
+ * @returns {AsyncGenerator<string>}
  */
 const collectFiles = async function* (...nodes) {
   for (const n of nodes) {
@@ -35,7 +37,7 @@ program
   .action(async (file, files, { silent, logging }) => {
     const log = new Logger(silent === true ? 3 : parseInt(logging));
     for await (const fPath of collectFiles(file, ...files)) {
-      log.startTime();
+      log.startTime('suite');
       try {
         const spec = fPath.endsWith('.js')
           // eslint-disable-next-line max-len
@@ -48,7 +50,7 @@ program
         log.error(`ERROR ${e.message}`);
       } finally {
         log.log('');
-        log.endTime();
+        log.endTime('suite');
       }
     }
   });

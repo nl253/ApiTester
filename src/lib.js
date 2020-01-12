@@ -1,3 +1,4 @@
+
 const { join } = require('path');
 const { assert } = require('chai');
 
@@ -5,6 +6,9 @@ const { green } = require('chalk');
 const rp = require('request-promise-native');
 
 const Ajv = require('ajv');
+
+// eslint-disable-next-line no-unused-vars
+const Logger = require('./logger');
 
 const ajv = new Ajv({ allErrors: true });
 
@@ -32,7 +36,7 @@ const {
  */
 const runRequest = async (request, { log }) => {
   logRequest(request, log);
-  log.startTime();
+  log.startTime('request');
   const res = await rp({
     uri: `https://${(request.path)}`,
     method: request.method,
@@ -42,7 +46,7 @@ const runRequest = async (request, { log }) => {
     json: request.parse,
     resolveWithFullResponse: true,
   });
-  log.endTime();
+  log.endTime('request');
   res.headers = normalizeHeaders(res.headers);
   logResponse(res, log);
   assert.equal(res.statusCode, request.response.status);
@@ -56,6 +60,7 @@ const runRequest = async (request, { log }) => {
     const validate = ajv.compile(request.response.body);
     const valid = validate(res.body);
     if (!valid) {
+      // @ts-ignore
       throw new Error(`schema validation failed ${getSchemaErrMsg(validate)}`);
     }
   } else {
@@ -75,8 +80,10 @@ const runRequest = async (request, { log }) => {
  *   headers: Record<string, string>,
  *   query: Record<string, string>,
  *   path: string,
- *   response: {}}} test
+ *   response: {headers: Record<string, string>, status: number}
+ *   }} test
  * @param {{log: Logger}} opts
+ * @yields {Promise<{value: void, done: boolean}>}
  */
 const runTest = async function* (test, { log }) {
   logTest(test, log);
@@ -113,11 +120,13 @@ const runTest = async function* (test, { log }) {
  *   description: string,
  *   parse: boolean,
  *   mode: ('exact'|'schema'),
- *   response: {}, path: string,
+ *   response: {status: number, headers: Record<string, string>},
+ *   path: string,
  *   headers: Record<string, string>,
  *   tests: Array<*>,
  *   query: Record<string, string>}} suite
  * @param {{log: Logger}} opts
+ * @yields {Promise<{value: void, done: boolean}>}
  */
 const runSuite = async function* (suite, { log }) {
   logSuite(suite, log);
@@ -149,8 +158,9 @@ const runSuite = async function* (suite, { log }) {
 };
 
 /**
- * @param {{}} s
+ * @param {{response: {}}} s
  * @param {{log: Logger}} opts
+ * @yields {Promise<{value: void, done: boolean}>}
  */
 const run = (s, { log }) => runSuite({
   name: '',

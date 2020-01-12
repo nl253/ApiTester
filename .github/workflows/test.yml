@@ -40,6 +40,9 @@ jobs:
       - name: Lint Dependencies
         shell: bash
         run: npm run lint:deps
+      - name: Check Typescript Types
+        shell: bash
+        run: npm run lint:ts
       - name: Check JSDoc Types
         shell: bash
         run: npm run lint:types
