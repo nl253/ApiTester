@@ -21,9 +21,17 @@
       ]
     },
     "method": {
-      "type": "string",
-      "minLength": 1,
-      "pattern": "[a-zA-Z]+"
+      "enum": [
+        "get",
+        "post",
+        "patch",
+        "put",
+        "delete",
+        "head",
+        "trace",
+        "connect",
+        "options"
+      ]
     },
     "dict": {
       "type": "object",
