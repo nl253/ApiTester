@@ -42,7 +42,7 @@ jobs:
         run: npm run lint:deps
       - name: Check JSDoc Types
         shell: bash
-        run: npm run doc
+        run: npm run lint:types
 #      - name: Test Code
 #        shell: bash
 #        run: npm test

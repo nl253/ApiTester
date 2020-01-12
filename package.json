@@ -123,6 +123,7 @@
     "lint:code": "bash -c 'for i in \"$(git ls-files | grep \\.js$ | grep -v docs)\"; do echo $i && npx eslint ./$i; done'",
     "lint:json": "bash -c 'for i in \"$(git ls-files | grep \\.json$ | grep -v docs)\"; do echo $i && npx jsonlint ./$i; done'",
     "lint:js": "npx acorn --allow-hash-bang --ecma9 ./bin/index.js",
+    "lint:types": "bash -c \"npx jsdoc --pedantic -d ./docs -R ./README* --recurse ./src ./bin ./examples\"",
     "lint:doc": "bash -c 'for i in \"$(git ls-files | grep \\.md$ | grep -v docs)\"; do echo $i && npm run lint:doc:markdown-lint && npm run lint:doc:write-good && npm run lint:doc:remark; done'",
     "lint:doc:write-good": "bash -c 'for i in \"$(git ls-files | grep \\.md$ | grep -v docs)\"; do echo $i && npx write-good --so --weasel --tooWordy --cliches --thereIs $i || echo ''; done'",
     "lint:doc:markdown-lint": "bash -c 'for i in \"$(git ls-files | grep \\.md$ | grep -v docs)\"; do echo $i && npx markdown-lint $i; done'",
