@@ -36,6 +36,7 @@ parserOptions:
   ecmaVersion: 2018
 root: true
 rules:
+  node/shebang: warn
   indent:
     - error
     - 2
