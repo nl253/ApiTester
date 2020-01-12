@@ -1,5 +1,5 @@
 {
-  "$schema": "./../schema.json",
+  "$schema": "https://raw.githubusercontent.com/nl253/ApiTester/master/schema.json",
   "path": "nlp-apim.azure-api.net",
   "mode": "schema",
   "headers": {
